@@ -6,11 +6,12 @@ authors = [
     {name = "artemevtusenko238",email = "artemevtusenko238@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.13,<4"
 dependencies = [
     "aiohttp (>=3.11.14,<4.0.0)",
     "names (>=0.3.0,<0.4.0)",
-    "websockets (==11.0.3)"
+    "websockets (==11.0.3)",
+    "aiopath (>=0.7.7,<0.8.0)"
 ]
 
 

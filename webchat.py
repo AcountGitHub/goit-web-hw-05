@@ -1,13 +1,21 @@
 import asyncio
 import logging
-import aiohttp
 import websockets
 import names
 from main import get_exchange
+from datetime import datetime
+from aiopath import AsyncPath
+from aiofile import async_open
 from websockets import WebSocketServerProtocol
 from websockets.exceptions import ConnectionClosedOK
 
 logging.basicConfig(level=logging.INFO)
+
+APATH = AsyncPath("exchange.log")
+
+async def writelog(date: str):
+    async with async_open(APATH, mode='a') as afd:
+        await afd.write(f'Exchange executed {date}\n')
 
 
 class Server:
@@ -45,6 +53,7 @@ class Server:
                     if len(mes_parts) > 2:
                         currency_list.extend(mes_parts[2:])
                     exchange = await get_exchange(number_last_days, currency_list)
+                    await writelog(datetime.now().strftime("%d.%m.%Y, %H:%M:%S"))
                     await self.send_to_clients(exchange)
                 else:
                     await self.send_to_clients(f"{ws.name}: {message}")
