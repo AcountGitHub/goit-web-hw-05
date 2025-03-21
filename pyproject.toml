@@ -1,0 +1,19 @@
+[project]
+name = "goit-web-hw-05"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "artemevtusenko238",email = "artemevtusenko238@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aiohttp (>=3.11.14,<4.0.0)",
+    "names (>=0.3.0,<0.4.0)",
+    "websockets (==11.0.3)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
