@@ -25,19 +25,26 @@ async def request(url: str):
 
 async def get_exchange(number_days: int, curr_list: list):
     result = []
+    responses = []
     for index_day in range(1,number_days+1):
         dt = datetime.now() - timedelta(days=index_day)
         day_str = dt.strftime("%d.%m.%Y")
         try:
-            response = await request(f'https://api.privatbank.ua/p24api/exchange_rates?date={day_str}')
-            curr_item = {}
-            for curr in curr_list:
-                curr_item[curr] = await res_for_currency(curr, response)
-            date_dict = {response['date']: curr_item}
-            result.append(date_dict)
+            responses.append(request(f'https://api.privatbank.ua/p24api/exchange_rates?date={day_str}'))
         except HttpError as err:
             print(err)
             return None
+    result_responses = await asyncio.gather(*responses)
+    for response in result_responses:
+        res_dict = []
+        curr_item = {}
+        for curr in curr_list:
+            res_dict.append(res_for_currency(curr, response))
+        curr_its = await asyncio.gather(*res_dict)
+        for i in range(len(curr_list)):
+            curr_item[curr_list[i]] = curr_its[i]
+        date_dict = {response['date']: curr_item}
+        result.append(date_dict)
     return await list_dict_to_str(result,"")
 
 
